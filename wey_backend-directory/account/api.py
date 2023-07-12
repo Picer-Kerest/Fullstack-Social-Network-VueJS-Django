@@ -20,6 +20,10 @@ def me(request):
 @authentication_classes([])
 @permission_classes([])
 def signup(request):
+    """
+    Нет ограничений на доступ, то есть права и аутентификация не требуются.
+    Если же не указать два декоратора, то будет требовать аутентификацию и права по умолчанию.
+    """
     data = request.data
     message = 'success'
 
