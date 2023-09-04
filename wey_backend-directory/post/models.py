@@ -28,4 +28,6 @@ class Post(models.Model):
     def created_at_formatted(self):
         return timesince(self.created_at)
 
+    def __str__(self):
+        return self.body[:150]
 

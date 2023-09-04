@@ -6,12 +6,14 @@ import Login from "@/views/Login.vue";
 import Feed from "@/views/Feed.vue";
 import Messages from "@/views/Messages.vue";
 import Search from "@/views/Search.vue";
+import Profile from "@/views/Profile.vue";
 
 
 const routes = [
     {path: '/', name: 'home', component: HomeView},
     {path: '/about', name: 'about', component: AboutView},
     {path: '/signup', name: 'signup', component: Signup},
+    {path: '/profile/:id', name: 'profile', component: Profile},
     {path: '/login', name: 'login', component: Login},
     {path: '/feed', name: 'feed', component: Feed},
     {path: '/messages', name: 'messages', component: Messages},
