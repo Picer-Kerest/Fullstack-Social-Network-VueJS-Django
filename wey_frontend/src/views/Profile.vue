@@ -30,9 +30,7 @@
 
 
       <div class="p-4 bg-white border border-gray-200 rounded-lg" v-for="post in posts" :key="post.id">
-        {{ post.created_by.name }}
-        {{ post.created_at_formatted }}
-        <br>{{ post.body }}
+        <FeedItem :post="post" />
       </div>
 
     </div>
@@ -48,6 +46,7 @@
 import axios from "axios";
 import PeopleYouMayKnow from "../components/PeopleYouMayKnow.vue"
 import Trends from "../components/Trends.vue"
+import FeedItem from '../components/FeedItem.vue'
 import {mapActions, mapGetters} from "vuex"
 
 export default {
@@ -55,6 +54,7 @@ export default {
   components: {
     PeopleYouMayKnow,
     Trends,
+    FeedItem,
   },
   data: () => ({
     posts: [],
@@ -63,6 +63,15 @@ export default {
   }),
   mounted() {
     this.getFeed()
+  },
+  watch: {
+    '$route.params.id': {
+      handler: function() {
+        this.getFeed()
+      },
+      deep: true,
+      immediate: true
+    }
   },
   // updated() {
   //   // this.getFeed()

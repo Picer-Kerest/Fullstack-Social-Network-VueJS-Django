@@ -46,7 +46,10 @@
 
 <script>
 export default {
-  name: "FeedItem"
+  name: "FeedItem",
+  props: {
+    post: Object
+  }
 }
 </script>
 
