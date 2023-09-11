@@ -5,6 +5,7 @@ from django.http import JsonResponse
 
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from .forms import SignupForm
+from .models import User, FriendshipRequest
 
 
 @api_view(['GET'])
@@ -41,5 +42,15 @@ def signup(request):
 
     return JsonResponse({
         'message': message
+    })
+
+
+@api_view(['POST'])
+def send_friendship_request(request, pk):
+    print('send_friendship_request ', pk)
+    user = User.objects.get(pk=pk)
+    friendship_request = FriendshipRequest(created_for=user, created_by=request.user)
+    return JsonResponse({
+        'message': 'friendship request created successfully'
     })
 
