@@ -45,6 +45,8 @@ def signup(request):
     })
 
 
+
+
 @api_view(['POST'])
 def send_friendship_request(request, pk):
     print('send_friendship_request ', pk)
