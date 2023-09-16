@@ -117,6 +117,20 @@ WSGI_APPLICATION = 'wey_backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# For Docker
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'fullstack_db',
+#         'USER': 'postgres',
+#         'PASSWORD': 'qwerty052152',
+#         'HOST': 'db',  # имя сервиса в docker-compose.yml, где запущен контейнер PostgreSQL
+#         'PORT': 5432,  # порт PostgreSQL
+#         # ЗДЕСЬ ИСПОЛЬЗУЕМ 32 ПОРТ
+#     }
+# }
+
+# For local
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',

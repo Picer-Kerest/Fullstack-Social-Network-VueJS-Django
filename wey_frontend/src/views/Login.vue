@@ -75,21 +75,25 @@ export default {
       if (this.errors.length === 0) {
         await axios.post('/api/login/', this.form)
             .then(response => {
-              //  У нас данные приходят в JSON, ибо JSONResponse в Backend'e
               this.setToken(response.data)
               axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.access
-            })
-            .catch(error => {
-              console.log('Error ', error)
-            })
 
-        await axios.get('/api/me/')
-            .then(response => {
-              this.setUserInfo(response.data)
-              this.$router.push({ name: 'feed' })
+              axios.get('/api/me/')
+                  .then(response => {
+                    this.setUserInfo(response.data)
+                    this.$router.push({ name: 'feed' })
+                  })
+                  .catch(error => {
+                    console.log('Error ', error)
+                  })
             })
             .catch(error => {
               console.log('Error ', error)
+              console.log('Mistake. Check the entered data')
+              this.showToast({
+                duration: 5000,
+                message: 'Mistake. Check the entered data',
+                style: 'bg-red-300'})
             })
       }
 

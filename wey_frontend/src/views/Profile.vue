@@ -81,8 +81,7 @@ export default {
   },
   methods: {
     sendFriendshipRequest() {
-      console.log('sendFriendshipRequest')
-      axios.post(`api/friends/request/${this.$route.params.id}/`)
+      axios.post(`api/friends/${this.$route.params.id}/request/`)
           .then(response => {
             console.log('Data is: ', response.data)
           })

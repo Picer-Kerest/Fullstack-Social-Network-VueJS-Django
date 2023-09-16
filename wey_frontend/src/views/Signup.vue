@@ -74,9 +74,11 @@ export default {
       password2: '',
     },
     errors: [],
+
   }),
   methods: {
     ...mapActions('toast', ['showToast', ]),
+    ...mapActions('user', ['setToken', ]),
     submitForm() {
       // Форма соответствует backend форме - SignupForm
       this.errors = []
@@ -87,6 +89,10 @@ export default {
 
       if (this.form.name === '') {
         this.errors.push('Your name is missing')
+      }
+
+      if (this.form.password1.length < 9) {
+        this.errors.push('The password is too short')
       }
 
       if (this.form.password1 === '') {
@@ -100,19 +106,35 @@ export default {
       if (this.errors.length === 0) {
         axios.post('/api/signup/', this.form)
             .then(response => {
-            //  У нас данные приходят в JSON, ибо JSONResponse Api
               if (response.data.message === 'success') {
-                console.log('Success toast')
-                console.log('response.data.message ', response.data.message)
-                this.showToast({
-                  duration: 5000,
-                  message: 'The user is registered. Please log in',
-                  style: 'bg-emerald-500'})
+                const new_user_id = response.data.user.id
+                // this.showToast({
+                //   duration: 5000,
+                //   message: 'The user is registered. Please log in',
+                //   style: 'bg-emerald-500'})
+
+                axios.post('/api/login/', {
+                  email: this.form.email,
+                  password: this.form.password1,
+                })
+                    .then(response => {
+                      this.setToken(response.data)
+                      axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.access
+                      this.$router.push({ name: 'profile', params: { id: new_user_id }})
+                      this.showToast({
+                        duration: 5000,
+                        message: 'The user is registered. Please log in',
+                        style: 'bg-emerald-500'})
+                    })
+                    .catch(error => {
+                      console.log('Error ', error)
+                    })
 
                 this.form.email = ''
                 this.form.name = ''
                 this.form.password1 = ''
                 this.form.password2 = ''
+                // this.$router.push({ name: 'login' })
               } else {
                 console.log('Not success toast')
                 this.showToast({

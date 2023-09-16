@@ -31,3 +31,14 @@ garbage/
 .idea/
 isolation/
 *helper.*
+docker garbage.txt
+
+
+# Docker
+.dockerignore
+.gitattributes
+docker-compose.yml
+Dockerfile_front
+Dockerfile_web
+initial.sql
+requirements.txt
