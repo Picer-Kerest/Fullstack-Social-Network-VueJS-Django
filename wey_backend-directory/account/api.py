@@ -37,6 +37,7 @@ def signup(request):
     })
 
     new_user = {}
+    errors_messages = []
 
     if form.is_valid():
         form.save()
@@ -44,23 +45,13 @@ def signup(request):
         new_user = UserSerializer(new_user)
         new_user = new_user.data
     else:
-        """
-        В Django эти правила пароля могут быть настроены в файле настроек проекта 
-        (settings.py) с помощью переменных, таких как MINIMUMPASSWORDLENGTH 
-        (минимальная длина пароля), COMMONPASSWORDS (список популярных паролей), 
-        SIMILARITYTHRESHOLD (порог схожести с другой личной информацией) и другие. 
-        Django автоматически проводит проверку пароля пользователя при создании аккаунта или 
-        изменении пароля и отображает это сообщение, если пользователь 
-        не соответствует указанным требованиям.
-        """
-        print('form: ', form)
-        # Закинуть валидаторы
-        #
+        # error_messages = [f"{field}: {', '.join(errors)}" for field, errors in form.errors.items()]
+        errors_messages = [value for value in form.errors.values()][0]
         message = 'error'
-    print('request.data: ', request.data)
     return JsonResponse({
         'message': message,
-        'user': new_user
+        'user': new_user,
+        'errors': errors_messages
     })
 
 

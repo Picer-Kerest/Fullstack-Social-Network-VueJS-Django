@@ -60,14 +60,14 @@ import axios from "axios";
 export default {
   name: 'App',
   beforeCreate() {
-    console.log('beforeCreate')
+    // console.log('beforeCreate')
     this.$store.dispatch('user/initStore')
     // Чтобы не было ошибки хука, нужно делать так
     const token = this.$store.getters['user/getAccess']
     // Чтобы не было ошибки хука
-    console.log('token here from App')
+    // console.log('token here from App')
     if (token) {
-      console.log('beforeCreate if=True token: ', token)
+      // console.log('beforeCreate if=True token: ', token)
       axios.defaults.headers.common["Authorization"] = "Bearer " + token
     } else {
       axios.defaults.headers.common["Authorization"] = ""

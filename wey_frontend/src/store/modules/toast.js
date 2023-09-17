@@ -28,15 +28,12 @@ const toastStore = {
             state.classes = payload.style
             state.isVisible = true
             setTimeout(() => {
-                console.log('mutations toast 10')
                 state.classes += ' -translate-y-28'
             }, 10)
             setTimeout(() => {
-                console.log('mutations toast ms - 500')
                 state.classes = state.classes.replace('-translate-y-28', '')
             }, state.ms - 500)
             setTimeout(() => {
-                console.log('mutations toast ms')
                 state.isVisible = false
             }, state.ms)
         },

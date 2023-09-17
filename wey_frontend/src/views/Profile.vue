@@ -46,6 +46,7 @@
       <Trends />
     </div>
   </div>
+  <Toast/>
 </template>
 
 <script>
@@ -54,6 +55,7 @@ import PeopleYouMayKnow from "../components/PeopleYouMayKnow.vue"
 import Trends from "../components/Trends.vue"
 import FeedItem from '../components/FeedItem.vue'
 import {mapActions, mapGetters} from "vuex"
+import Toast from '../components/Toast.vue'
 
 export default {
   name: "Profile",
@@ -61,6 +63,7 @@ export default {
     PeopleYouMayKnow,
     Trends,
     FeedItem,
+    Toast,
   },
   data: () => ({
     posts: [],
