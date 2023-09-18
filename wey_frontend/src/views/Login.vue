@@ -81,11 +81,11 @@ export default {
               axios.get('/api/me/')
                   .then(response => {
                     this.setUserInfo(response.data)
-                    this.$router.push({ name: 'feed' })
                   })
                   .catch(error => {
                     console.log('Error ', error)
                   })
+              this.$router.push({ name: 'feed' })
             })
             .catch(error => {
               console.log('Error ', error)
@@ -94,6 +94,14 @@ export default {
                 duration: 5000,
                 message: 'Mistake. Check the entered data',
                 style: 'bg-red-300'})
+            })
+            .finally(() => {
+              if (this.errors.length === 0) {
+                this.showToast({
+                  duration: 5000,
+                  message: 'Success login',
+                  style: 'bg-emerald-500'})
+              }
             })
       }
 

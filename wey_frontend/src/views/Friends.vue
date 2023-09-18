@@ -40,10 +40,31 @@
             <button class="inline-block py-4 px-6 bg-red-600 text-white rounded-lg" @click="handleRequest('rejected', friendshipRequest.created_by.id)">Reject</button>
           </div>
         </div>
+        <hr>
       </div>
 
-      <hr>
+      <div
+          class="p-4 bg-white border border-gray-200 rounded-lg grid grid-cols-2 gap-4"
+          v-if="friends.length"
+      >
+        <div
+            class="p-4 text-center bg-gray-100 rounded-lg"
+            v-for="user in friends"
+            v-bind:key="user.id"
+        >
 
+          <p>
+            <strong>
+              <RouterLink :to="{name: 'profile', params:{'id': user.id}}">{{ user.name }}</RouterLink>
+            </strong>
+          </p>
+
+          <div class="mt-6 flex space-x-8 justify-around">
+            <p class="text-xs text-gray-500">120 friends</p>
+            <p class="text-xs text-gray-500">130 posts</p>
+          </div>
+        </div>
+      </div>
 
     </div>
 

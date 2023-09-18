@@ -28,6 +28,7 @@
       <Trends />
     </div>
   </div>
+  <Toast/>
 </template>
 
 <script>
@@ -35,6 +36,7 @@ import axios from "axios";
 import PeopleYouMayKnow from "../components/PeopleYouMayKnow.vue"
 import Trends from "../components/Trends.vue"
 import FeedItem from '../components/FeedItem.vue'
+import Toast from '../components/Toast.vue'
 
 export default {
   name: "Feed",
@@ -42,6 +44,7 @@ export default {
     PeopleYouMayKnow,
     Trends,
     FeedItem,
+    Toast,
   },
   data: () => ({
     posts: [],

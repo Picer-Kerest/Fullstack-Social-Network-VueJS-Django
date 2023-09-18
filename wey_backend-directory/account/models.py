@@ -64,6 +64,10 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class FriendshipRequest(models.Model):
+    """
+    created_by - Кем создан запрос дружбы
+    created_for - Для кого он создан
+    """
     SENT = 'sent'
     ACCEPTED = 'accepted'
     REJECTED = 'rejected'
@@ -75,10 +79,8 @@ class FriendshipRequest(models.Model):
     )
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    created_by = models.ForeignKey(User, related_name='created_friendshiprequests', on_delete=models.CASCADE)
     created_for = models.ForeignKey(User, related_name='received_friendshiprequests', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User, related_name='created_friendshiprequests', on_delete=models.CASCADE)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=SENT)
 
-    def __str__(self):
-        return f'{self.created_by} -> {self.created_for}'

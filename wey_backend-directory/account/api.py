@@ -61,7 +61,7 @@ def friends(request, pk):
     requests = []
 
     if user == request.user:
-        requests = FriendshipRequest.objects.filter(created_for=request.user)
+        requests = FriendshipRequest.objects.filter(created_for=request.user, status=FriendshipRequest.SENT)
         requests = FriendshipRequestSerializer(requests, many=True)
         requests = requests.data
     friends = user.friends.all()
@@ -84,5 +84,31 @@ def send_friendship_request(request, pk):
 
 @api_view(['POST'])
 def handle_request(request, pk, status):
+    """
+    При выполнении user.friends.add(request.user), происходит добавление друга в список друзей для объекта user,
+    а также добавление друга в список друзей для объекта request.user.
+
+    Это происходит из-за того, что user и request.user являются экземплярами модели User,
+    а friends представляет связь "многие-ко-многим" между объектами модели User.
+
+    При использовании метода add() для поля friends,
+    Django автоматически обновляет обе стороны данной связи, чтобы поддерживать консистентность.
+
+    Таким образом, когда вы добавляете друга request.user для user,
+    Django автоматически обновляет список друзей для user и список друзей для request.user.
+    """
     user = User.objects.get(pk=pk)
+    friendship_request = FriendshipRequest.objects.filter(created_for=request.user).get(created_by=user)
+    # Получаем запрос дружбы для авторизованного пользователя от того, кто его отправил
+
+    friendship_request.status = status
+    friendship_request.save()
+
+    if status == 'accepted':
+        user.friends.add(request.user)
+
+    return JsonResponse({
+        'message': 'friendship request updated successfully'
+    })
+
 
