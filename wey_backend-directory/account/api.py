@@ -4,9 +4,12 @@ from django.core.mail import send_mail
 from django.http import JsonResponse
 
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework_simplejwt.views import TokenObtainPairView
+
 from .forms import SignupForm
 from .models import User, FriendshipRequest
 from .serializers import UserSerializer, FriendshipRequestSerializer
+from .serializers import CustomTokenObtainPairSerializer
 
 
 @api_view(['GET'])
@@ -111,4 +114,7 @@ def handle_request(request, pk, status):
         'message': 'friendship request updated successfully'
     })
 
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
 

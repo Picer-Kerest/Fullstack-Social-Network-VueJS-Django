@@ -75,16 +75,22 @@ export default {
       if (this.errors.length === 0) {
         await axios.post('/api/login/', this.form)
             .then(response => {
+              // console.log('response', response.data)
               this.setToken(response.data)
               axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.access
+              let auth_user = {}
+              let myDct = response.data
 
-              axios.get('/api/me/')
-                  .then(response => {
-                    this.setUserInfo(response.data)
-                  })
-                  .catch(error => {
-                    console.log('Error ', error)
-                  })
+              for (const key in myDct) {
+                if (myDct.hasOwnProperty(key)) {
+                  const value = myDct[key]
+                  if (key !== 'access' && key !== 'refresh') {
+                    auth_user[key] = value
+                  }
+                }
+              }
+              console.log('auth_user', auth_user)
+              this.setUserInfo(auth_user)
               this.$router.push({ name: 'feed' })
             })
             .catch(error => {
