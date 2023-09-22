@@ -7,7 +7,7 @@
         <p><strong>{{ user.name }}</strong></p>
 
         <div class="mt-6 flex space-x-8 justify-around">
-          <RouterLink :to="{ name: 'friends', params: { id: getId } }" class="text-xs text-gray-500">182 friends</RouterLink>
+          <RouterLink :to="{ name: 'friends', params: { id: getId } }" class="text-xs text-gray-500">{{ user.friends_count }} friends</RouterLink>
           <p class="text-xs text-gray-500">120 posts</p>
         </div>
 
@@ -83,10 +83,26 @@ export default {
     }
   },
   methods: {
+    ...mapActions('toast', ['showToast', ]),
     sendFriendshipRequest() {
       axios.post(`api/friends/${this.$route.params.id}/request/`)
           .then(response => {
             console.log('Data is: ', response.data)
+
+            if (response.data.message === 'friendship request already sent') {
+              this.showToast({
+                duration: 5000,
+                message: 'The request has already been sent',
+                style: 'bg-red-300'
+              })
+            } else {
+              this.showToast({
+                duration: 5000,
+                message: 'The request was sent',
+                style: 'bg-emerald-500'
+              })
+            }
+
           })
           .catch(error => {
             console.log('Error', error)
@@ -95,8 +111,6 @@ export default {
     getFeed() {
       axios.get(`/api/posts/profile/${this.$route.params.id}/`)
           .then(response => {
-            console.log('Data is: ', response.data)
-
             this.posts = response.data.posts
             this.user = response.data.user
           })

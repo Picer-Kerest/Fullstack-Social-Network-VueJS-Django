@@ -6,7 +6,7 @@ from .models import User, FriendshipRequest
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'name', 'email', )
+        fields = ('id', 'name', 'email', 'friends_count', )
 
 
 class FriendshipRequestSerializer(serializers.ModelSerializer):
@@ -25,7 +25,6 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         user_id = self.user.id
         email = self.user.email
         name = self.user.name
-
         # Включаем данные о пользователе в JSON-ответ
         data.update({'id': user_id, 'email': email, 'name': name})
         return data

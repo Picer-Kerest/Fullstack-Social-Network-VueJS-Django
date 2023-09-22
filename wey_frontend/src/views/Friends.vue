@@ -7,7 +7,7 @@
         <p><strong>{{ user.name }}</strong></p>
 
         <div class="mt-6 flex space-x-8 justify-around">
-          <p class="text-xs text-gray-500">182 friends</p>
+          <p class="text-xs text-gray-500">{{ user.friends_count }} friends</p>
           <p class="text-xs text-gray-500">120 posts</p>
         </div>
 
@@ -60,7 +60,7 @@
           </p>
 
           <div class="mt-6 flex space-x-8 justify-around">
-            <p class="text-xs text-gray-500">120 friends</p>
+            <p class="text-xs text-gray-500">{{ user.friends_count }} friends</p>
             <p class="text-xs text-gray-500">130 posts</p>
           </div>
         </div>
@@ -73,6 +73,7 @@
       <Trends />
     </div>
   </div>
+  <Toast />
 </template>
 
 <script>
@@ -81,6 +82,7 @@ import PeopleYouMayKnow from "../components/PeopleYouMayKnow.vue"
 import Trends from "../components/Trends.vue"
 import FeedItem from '../components/FeedItem.vue'
 import {mapActions, mapGetters} from "vuex"
+import Toast from '../components/Toast.vue'
 
 export default {
   name: "Friends",
@@ -88,6 +90,7 @@ export default {
     PeopleYouMayKnow,
     Trends,
     FeedItem,
+    Toast,
   },
   mounted() {
     this.getFriends()
@@ -98,6 +101,7 @@ export default {
     friends: [],
   }),
   methods: {
+    ...mapActions('toast', ['showToast', ]),
     getFriends() {
       axios.get(`/api/friends/${this.$route.params.id}/`)
           .then(response => {

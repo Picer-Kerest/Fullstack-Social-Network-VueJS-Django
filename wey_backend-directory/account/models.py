@@ -84,3 +84,5 @@ class FriendshipRequest(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=SENT)
 
+    def __str__(self):
+        return f'friendship request from {self.created_by} to {self.created_for}'

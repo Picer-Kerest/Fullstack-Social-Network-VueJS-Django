@@ -131,7 +131,8 @@ export default {
                 // this.showToast({
                 //   duration: 5000,
                 //   message: "Fix the errors and try again",
-                //   style: 'bg-red-300'})
+                //   style: 'bg-red-300'
+                //   })
               }
             })
             .catch(error => {
@@ -142,7 +143,8 @@ export default {
                 this.showToast({
                   duration: 5000,
                   message: 'Success sign up',
-                  style: 'bg-emerald-500'})
+                  style: 'bg-emerald-500'
+                })
               }
             })
       }

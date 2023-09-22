@@ -3,15 +3,15 @@
     <div class="max-w-7xl mx-auto">
       <div class="flex items-center justify-between">
         <div class="menu-left">
-          <a href="#" class="text-xl">Wey</a>
+          <RouterLink :to="{ name: 'profile', params: { id: getId } }" class="text-xl">{{ getName }}</RouterLink>
         </div>
 
         <div class="menu-center flex space-x-12" v-if="getIsAuthenticated">
-          <a href="#" class="text-purple-700">
+          <RouterLink :to="{ name: 'feed' }">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
             </svg>
-          </a>
+          </RouterLink>
 
           <RouterLink :to="{ name: 'friends', params: { id: getId }}">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -59,30 +59,31 @@ import axios from "axios";
 
 export default {
   name: 'App',
+  created() {
+    const currentPath = window.location.pathname;
+    console.log(currentPath);
+  },
   beforeCreate() {
-    // console.log('beforeCreate')
+    // 'text-purple-700'
     this.$store.dispatch('user/initStore')
     // Чтобы не было ошибки хука, нужно делать так
     const token = this.$store.getters['user/getAccess']
     // Чтобы не было ошибки хука
-    // console.log('token here from App')
     if (token) {
-      // console.log('beforeCreate if=True token: ', token)
       axios.defaults.headers.common["Authorization"] = "Bearer " + token
     } else {
       axios.defaults.headers.common["Authorization"] = ""
     }
   },
   computed: {
-    ...mapGetters('user', ['getIsAuthenticated', 'getId']),
+    ...mapGetters('user', ['getIsAuthenticated', 'getId', 'getName', ]),
   },
   methods: {
     clearLocalStorage() {
       console.log('clearLocalStorage')
       localStorage.clear()
-    }
-
-}
+    },
+  }
 }
 </script>
 

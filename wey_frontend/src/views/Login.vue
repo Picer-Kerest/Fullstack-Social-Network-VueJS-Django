@@ -120,14 +120,16 @@ export default {
                       this.showToast({
                         duration: 5000,
                         message: 'Mistake. Check the entered data',
-                        style: 'bg-red-300'})
+                        style: 'bg-red-300'
+                      })
                     })
                     .finally(() => {
                       if (this.errors.length === 0) {
                         this.showToast({
                           duration: 5000,
                           message: 'Success login',
-                          style: 'bg-emerald-500'})
+                          style: 'bg-emerald-500'
+                        })
                       }
                     })
 

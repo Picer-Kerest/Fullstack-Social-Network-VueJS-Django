@@ -83,11 +83,24 @@ def friends(request, pk):
 
 @api_view(['POST'])
 def send_friendship_request(request, pk):
+    """
+    created_by - Кем создан запрос дружбы
+    created_for - Для кого он создан
+    """
     user = User.objects.get(pk=pk)
-    friendship_request = FriendshipRequest.objects.create(created_for=user, created_by=request.user)
-    return JsonResponse({
-        'message': 'friendship request created successfully'
-    })
+
+    check_1 = FriendshipRequest.objects.filter(created_for=request.user, created_by=user)
+    check_2 = FriendshipRequest.objects.filter(created_for=user, created_by=request.user)
+    if not (check_1 or check_2):
+        # Условие выполнится только если у нас нет запроса дружбы ни с одной стороны
+        FriendshipRequest.objects.create(created_for=user, created_by=request.user)
+        return JsonResponse({
+            'message': 'friendship request created successfully'
+        })
+    else:
+        return JsonResponse({
+            'message': 'friendship request already sent'
+        })
 
 
 @api_view(['POST'])
@@ -114,6 +127,12 @@ def handle_request(request, pk, status):
 
     if status == 'accepted':
         user.friends.add(request.user)
+        user.friends_count += 1
+        user.save()
+
+        request_user = request.user
+        request_user.friends_count += 1
+        request_user.save()
 
     return JsonResponse({
         'message': 'friendship request updated successfully'
@@ -122,26 +141,6 @@ def handle_request(request, pk, status):
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
-
-
-class CheckEmailExistsView(APIView):
-    permission_classes = (AllowAny, )
-    authentication_classes = ()
-
-    def get(self, request):
-        email = request.query_params.get('email')
-        user_exists = User.objects.filter(email=email).exists()
-        return Response({"email_exists": user_exists}, status=status.HTTP_200_OK)
-
-
-# class CheckInnExistsView(APIView):
-#     permission_classes = (AllowAny, )
-#     authentication_classes = ()
-#
-#     def get(self, request):
-#         inn = request.query_params.get('inn')
-#         company_exists = Company.objects.filter(inn=inn).exists()
-#         return Response({"inn_exists": company_exists}, status=status.HTTP_200_OK)
 
 
 class CheckCredentialsView(APIView):
