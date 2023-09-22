@@ -32,6 +32,7 @@ garbage/
 isolation/
 *helper.*
 docker garbage.txt
+FakeLogin.vue
 
 
 # Docker

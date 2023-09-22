@@ -43,14 +43,19 @@
       </div>
     </div>
   </div>
+  <Toast/>
 </template>
 
 <script>
 import axios from "axios"
 import {mapActions} from "vuex";
+import Toast from '../components/Toast.vue'
 
 export default {
   name: "Login",
+  components: {
+    Toast
+  },
   data: () => ({
     form: {
       email: '',
@@ -73,42 +78,104 @@ export default {
       }
 
       if (this.errors.length === 0) {
-        await axios.post('/api/login/', this.form)
+        await axios.get('api/check_credentials/', {
+          params: {
+            email: this.form.email,
+            password: this.form.password
+          }
+        })
             .then(response => {
-              // console.log('response', response.data)
-              this.setToken(response.data)
-              axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.access
-              let auth_user = {}
-              let myDct = response.data
+              // console.log('response from check email', response.data)
 
-              for (const key in myDct) {
-                if (myDct.hasOwnProperty(key)) {
-                  const value = myDct[key]
-                  if (key !== 'access' && key !== 'refresh') {
-                    auth_user[key] = value
-                  }
-                }
+              // response.data
+
+              if (!response.data.email_exists) {
+                this.errors.push("The specified email doesn't exist")
+                console.log('email не существует')
+              } else if (response.data.credentials_valid) {
+                console.log('Всё хорошо, всё классно')
+                axios.post('/api/login/', this.form)
+                    .then(response => {
+                      // console.log('response', response.data)
+                      this.setToken(response.data)
+                      axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.access
+                      let auth_user = {}
+                      let myDct = response.data
+
+                      for (const key in myDct) {
+                        if (myDct.hasOwnProperty(key)) {
+                          const value = myDct[key]
+                          if (key !== 'access' && key !== 'refresh') {
+                            auth_user[key] = value
+                          }
+                        }
+                      }
+                      // console.log('auth_user', auth_user)
+                      this.setUserInfo(auth_user)
+                      this.$router.push({ name: 'feed' })
+                    })
+                    .catch(error => {
+                      console.log('Error ', error)
+                      console.log('Mistake. Check the entered data')
+                      this.showToast({
+                        duration: 5000,
+                        message: 'Mistake. Check the entered data',
+                        style: 'bg-red-300'})
+                    })
+                    .finally(() => {
+                      if (this.errors.length === 0) {
+                        this.showToast({
+                          duration: 5000,
+                          message: 'Success login',
+                          style: 'bg-emerald-500'})
+                      }
+                    })
+
+              } else {
+                this.errors.push('Incorect password')
+                console.log('Неправильный пароль')
               }
-              console.log('auth_user', auth_user)
-              this.setUserInfo(auth_user)
-              this.$router.push({ name: 'feed' })
             })
             .catch(error => {
-              console.log('Error ', error)
-              console.log('Mistake. Check the entered data')
-              this.showToast({
-                duration: 5000,
-                message: 'Mistake. Check the entered data',
-                style: 'bg-red-300'})
+              console.log('Error from check', error)
             })
-            .finally(() => {
-              if (this.errors.length === 0) {
-                this.showToast({
-                  duration: 5000,
-                  message: 'Success login',
-                  style: 'bg-emerald-500'})
-              }
-            })
+
+        // await axios.post('/api/login/', this.form)
+        //     .then(response => {
+        //       // console.log('response', response.data)
+        //       this.setToken(response.data)
+        //       axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.access
+        //       let auth_user = {}
+        //       let myDct = response.data
+        //
+        //       for (const key in myDct) {
+        //         if (myDct.hasOwnProperty(key)) {
+        //           const value = myDct[key]
+        //           if (key !== 'access' && key !== 'refresh') {
+        //             auth_user[key] = value
+        //           }
+        //         }
+        //       }
+        //       // console.log('auth_user', auth_user)
+        //       this.setUserInfo(auth_user)
+        //       this.$router.push({ name: 'feed' })
+        //     })
+        //     .catch(error => {
+        //       console.log('Error ', error)
+        //       console.log('Mistake. Check the entered data')
+        //       this.showToast({
+        //         duration: 5000,
+        //         message: 'Mistake. Check the entered data',
+        //         style: 'bg-red-300'})
+        //     })
+        //     .finally(() => {
+        //       if (this.errors.length === 0) {
+        //         this.showToast({
+        //           duration: 5000,
+        //           message: 'Success login',
+        //           style: 'bg-emerald-500'})
+        //       }
+        //     })
       }
 
 

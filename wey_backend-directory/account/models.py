@@ -37,7 +37,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     friends = models.ManyToManyField('self', blank=True)
     # self - сам к себе, то есть к User
 
-    # friends_count = models.IntegerField(default=0)
+    friends_count = models.IntegerField(default=0)
 
     # people_you_may_know = models.ManyToManyField('self')
     #

@@ -123,16 +123,15 @@ export default {
                 this.form.name = ''
                 this.form.password1 = ''
                 this.form.password2 = ''
-                // this.$router.push({ name: 'login' })
               } else {
                 let submit_errors = response.data.errors
                 submit_errors.forEach(error => {
                   this.errors.push(error)
                 })
-                this.showToast({
-                  duration: 5000,
-                  message: "Fix the errors and try again",
-                  style: 'bg-red-300'})
+                // this.showToast({
+                //   duration: 5000,
+                //   message: "Fix the errors and try again",
+                //   style: 'bg-red-300'})
               }
             })
             .catch(error => {

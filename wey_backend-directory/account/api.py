@@ -1,9 +1,14 @@
 from django.conf import settings
+from django.contrib.auth import authenticate
 from django.contrib.auth.forms import PasswordChangeForm
 from django.core.mail import send_mail
 from django.http import JsonResponse
+from rest_framework import status
 
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .forms import SignupForm
@@ -118,3 +123,40 @@ def handle_request(request, pk, status):
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 
+
+class CheckEmailExistsView(APIView):
+    permission_classes = (AllowAny, )
+    authentication_classes = ()
+
+    def get(self, request):
+        email = request.query_params.get('email')
+        user_exists = User.objects.filter(email=email).exists()
+        return Response({"email_exists": user_exists}, status=status.HTTP_200_OK)
+
+
+# class CheckInnExistsView(APIView):
+#     permission_classes = (AllowAny, )
+#     authentication_classes = ()
+#
+#     def get(self, request):
+#         inn = request.query_params.get('inn')
+#         company_exists = Company.objects.filter(inn=inn).exists()
+#         return Response({"inn_exists": company_exists}, status=status.HTTP_200_OK)
+
+
+class CheckCredentialsView(APIView):
+    permission_classes = (AllowAny, )
+    authentication_classes = ()
+
+    def get(self, request):
+        email = request.query_params.get('email')
+        password = request.query_params.get('password')
+
+        email_exists = User.objects.filter(email=email).exists()
+        user = authenticate(email=email, password=password)
+        user_exists = user is not None
+
+        return Response({
+            "credentials_valid": user_exists,
+            "email_exists": email_exists
+        }, status=status.HTTP_200_OK)
