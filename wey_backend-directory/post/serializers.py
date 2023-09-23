@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Post, PostAttachment
+from .models import Post, PostAttachment, Like
 from account.serializers import UserSerializer
 
 
@@ -8,4 +8,4 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ('id', 'body', 'created_by', 'created_at_formatted')
+        fields = ('id', 'body', 'likes_count', 'created_by', 'created_at_formatted')
