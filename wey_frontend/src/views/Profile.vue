@@ -12,8 +12,20 @@
         </div>
 
         <div class="mt-6">
-          <button class="inline-block py-4 px-3 bg-purple-600 text-sm text-white rounded-lg" @click="sendFriendshipRequest">
+          <button
+              class="inline-block py-4 px-3 bg-purple-600 text-sm text-white rounded-lg w-full"
+              v-if="getId !== user.id"
+              @click="sendFriendshipRequest"
+          >
             Send friendship request
+          </button>
+
+          <button
+              class="inline-block py-4 px-3 bg-red-600 text-sm text-white rounded-lg w-full"
+              v-if="getId === user.id"
+              @click="logout"
+          >
+            Logout
           </button>
         </div>
       </div>
@@ -84,6 +96,7 @@ export default {
   },
   methods: {
     ...mapActions('toast', ['showToast', ]),
+    ...mapActions('user', ['removeToken', ]),
     sendFriendshipRequest() {
       axios.post(`api/friends/${this.$route.params.id}/request/`)
           .then(response => {
@@ -131,6 +144,16 @@ export default {
             console.log('Error', error)
           })
     },
+    logout() {
+      console.log('Logout')
+      this.removeToken()
+      this.$router.push({name: 'login'})
+      this.showToast({
+        duration: 5000,
+        message: 'Success logout',
+        style: 'bg-emerald-500'
+      })
+    }
   },
   computed: {
     ...mapGetters('user', ['getName', 'getId']),

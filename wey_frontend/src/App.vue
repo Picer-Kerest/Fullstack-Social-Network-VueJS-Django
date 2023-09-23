@@ -3,7 +3,7 @@
     <div class="max-w-7xl mx-auto">
       <div class="flex items-center justify-between">
         <div class="menu-left">
-          <RouterLink :to="{ name: 'profile', params: { id: getId } }" class="text-xl">{{ getName }}</RouterLink>
+          <RouterLink :to="{ name: 'feed' }" class="text-xl">Wey</RouterLink>
         </div>
 
         <div class="menu-center flex space-x-12" v-if="getIsAuthenticated">
@@ -59,10 +59,6 @@ import axios from "axios";
 
 export default {
   name: 'App',
-  created() {
-    const currentPath = window.location.pathname;
-    console.log(currentPath);
-  },
   beforeCreate() {
     // 'text-purple-700'
     this.$store.dispatch('user/initStore')
@@ -79,9 +75,16 @@ export default {
     ...mapGetters('user', ['getIsAuthenticated', 'getId', 'getName', ]),
   },
   methods: {
+    ...mapActions('toast', ['showToast', ]),
     clearLocalStorage() {
       console.log('clearLocalStorage')
       localStorage.clear()
+      this.$router.push({name: 'login'})
+      this.showToast({
+        duration: 5000,
+        message: 'Success Logout',
+        style: 'bg-emerald-500'
+      })
     },
   }
 }
