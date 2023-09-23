@@ -8,7 +8,7 @@ from account.serializers import UserSerializer
 
 from .forms import PostForm
 from .models import Post, Like
-from .serializers import PostSerializer
+from .serializers import PostSerializer, PostDetailSerializer, CommentSerializer
 
 
 @api_view(['GET'])
@@ -25,9 +25,17 @@ def post_list(request):
 
 
 @api_view(['GET'])
-def post_list_profile(request, id):
-    user = User.objects.get(pk=id)
-    posts = Post.objects.filter(created_by__id=id)
+def post_detail(request, pk):
+    post = Post.objects.get(pk=pk)
+    return JsonResponse({
+        'post': PostDetailSerializer(post).data
+    }, safe=False)
+
+
+@api_view(['GET'])
+def post_list_profile(request, pk):
+    user = User.objects.get(pk=pk)
+    posts = Post.objects.filter(created_by__id=pk)
     posts_serializer = PostSerializer(posts, many=True)
     user_serializer = UserSerializer(user)
     return JsonResponse({
