@@ -9,6 +9,7 @@ import Messages from "@/views/Messages.vue";
 import Search from "@/views/Search.vue";
 import Profile from "@/views/Profile.vue";
 import Friends from "@/views/Friends.vue";
+import Post from "@/views/Post.vue";
 
 
 const router = createRouter({
@@ -23,6 +24,7 @@ const router = createRouter({
         {path: '/feed', name: 'feed', component: Feed},
         {path: '/messages', name: 'messages', component: Messages},
         {path: '/search', name: 'search', component: Search},
+        {path: '/:id', name: 'post', component: Post},
     ]
 })
 
