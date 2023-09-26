@@ -5,6 +5,12 @@
       <div class="p-4 bg-white border border-gray-200 rounded-lg" v-if="post.id">
         <FeedItem :post="post" />
       </div>
+
+      <div class="p-4 ml-6 bg-white border border-gray-200 rounded-lg" v-for="comment in post.comments" :key="comment.id">
+        <CommentItem :comment="comment" />
+      </div>
+
+
         <div class="bg-white border border-gray-200 rounded-lg">
           <form v-on:submit.prevent="submitForm" method="POST">
             <div class="p-4">
@@ -31,6 +37,7 @@ import axios from "axios";
 import PeopleYouMayKnow from "../components/PeopleYouMayKnow.vue"
 import Trends from "../components/Trends.vue"
 import FeedItem from '../components/FeedItem.vue'
+import CommentItem from '../components/CommentItem.vue'
 import Toast from '../components/Toast.vue'
 
 export default {
@@ -40,6 +47,7 @@ export default {
     Trends,
     FeedItem,
     Toast,
+    CommentItem,
   },
   data: () => ({
     post: {
@@ -55,7 +63,7 @@ export default {
     getPost() {
       axios.get(`/api/posts/${this.$route.params.id}/`)
           .then(response => {
-            console.log('Data is: ', response.data)
+            // console.log('Data is: ', response.data)
 
             this.post = response.data.post
           })
@@ -67,11 +75,10 @@ export default {
       axios.post(`/api/posts/${this.$route.params.id}/comment/`, {
         'body': this.body})
           .then(response => {
-            console.log('Response Data', response.data)
+            // console.log('Response Data', response.data)
 
-            this.post.comments.unshift(response.data)
-            // Добавляем элемент в начало массива
-
+            this.post.comments.push(response.data)
+            this.post.comments_count += 1
             this.body = ''
           })
           .catch(error => {

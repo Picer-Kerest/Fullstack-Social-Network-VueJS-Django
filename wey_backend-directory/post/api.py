@@ -90,8 +90,8 @@ def post_create_comment(request, pk):
     post.comments.add(comment)
     post.save()
 
-    return JsonResponse({
-        'message': 'comment was added'
-    })
+    serializer = CommentSerializer(comment)
+
+    return JsonResponse(serializer.data, safe=False)
 
 
